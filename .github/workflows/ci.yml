@@ -37,16 +37,6 @@ jobs:
           target: frigate
           tags: ${{ steps.setup.outputs.image-name }}-amd64
           cache-from: type=registry,ref=${{ steps.setup.outputs.cache-name }}-amd64
-      - name: Build and push TensorRT (x86 GPU)
-        uses: docker/bake-action@v4
-        with:
-          push: true
-          targets: tensorrt
-          files: docker/tensorrt/trt.hcl
-          set: |
-            tensorrt.tags=${{ steps.setup.outputs.image-name }}-tensorrt
-            *.cache-from=type=registry,ref=${{ steps.setup.outputs.cache-name }}-amd64
-            *.cache-to=type=registry,ref=${{ steps.setup.outputs.cache-name }}-amd64,mode=max
   # The majority of users running arm64 are rpi users, so the rpi
   # build should be the primary arm64 image
   assemble_default_build:
@@ -72,4 +62,3 @@ jobs:
           tags: ghcr.io/${{ steps.lowercaseRepo.outputs.lowercase }}:${{ github.ref_name }}-${{ env.SHORT_SHA }}
           suffixes: |
             -amd64
-            -rpi
